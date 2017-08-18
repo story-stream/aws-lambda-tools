@@ -4,7 +4,7 @@ import requests
 class Client(object):
 
     def __init__(self, *args, **kwargs):
-        super(Client, self).__init__(*args, **kwargs)
+        pass
 
     def invoke(self, FunctionName, Payload, InvocationType='RequestResponse'):
         return requests.post(
