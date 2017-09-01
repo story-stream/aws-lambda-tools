@@ -6,7 +6,6 @@ class Client(object):
 
     def __init__(self, *args, **kwargs):
         self._client = boto3.client(*args, **kwargs)
-        super(Client, self).__init__(*args, **kwargs)
 
     def invoke(self, *args, **kwargs):
         response = self._client.invoke(*args, **kwargs)
