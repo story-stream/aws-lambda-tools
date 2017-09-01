@@ -18,6 +18,9 @@ class Client(object):
             **kwargs
         )
 
+        if InvocationType == 'Event':
+            return
+
         return json.loads(''.join(self._get_payload(response['Payload'])))
 
     def _get_payload(self, body):

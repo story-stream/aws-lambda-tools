@@ -81,3 +81,14 @@ class LiveClientInvokeTestCase(unittest.TestCase):
         actual = self.client.invoke.call_args_list[0][1]['InvocationType']
 
         self.assertEqual(actual, expected)
+
+    def test_does_not_return_response_if_invocation_type_is_event(self):
+        self.client.invoke.return_value = None
+
+        actual = self.target.invoke(
+            FunctionName='testing',
+            Payload={'test': True},
+            InvocationType='Event',
+        )
+
+        self.assertIsNone(actual)
