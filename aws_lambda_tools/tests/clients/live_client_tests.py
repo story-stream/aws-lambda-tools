@@ -69,3 +69,15 @@ class LiveClientInvokeTestCase(unittest.TestCase):
         )
 
         self.assertEqual(actual, expected)
+
+    def test_defaults_invocation_type_to_request_response(self):
+        self.target.invoke(
+            FunctionName='testing',
+            Payload={'test': True},
+        )
+
+        expected = 'RequestResponse'
+
+        actual = self.client.invoke.call_args_list[0][1]['InvocationType']
+
+        self.assertEqual(actual, expected)

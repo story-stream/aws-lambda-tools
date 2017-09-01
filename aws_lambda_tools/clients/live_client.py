@@ -7,7 +7,7 @@ class Client(object):
     def __init__(self, *args, **kwargs):
         self._client = boto3.client(*args, **kwargs)
 
-    def invoke(self, FunctionName, Payload, InvocationType='Event', **kwargs):
+    def invoke(self, FunctionName, Payload, InvocationType='RequestResponse', **kwargs):
         if hasattr(Payload, 'iteritems'):
             Payload = json.dumps(Payload)
 
