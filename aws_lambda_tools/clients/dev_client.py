@@ -17,5 +17,5 @@ class Client(object):
         f = utils.get_state_machine_name(stateMachineArn)
         return requests.post(
             u'http://{}'.format(f),
-            json=Payload
+            json=input
         ).json()

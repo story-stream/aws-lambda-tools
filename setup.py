@@ -9,7 +9,7 @@ packages = find_packages(exclude=['ex_setup'])
 
 setup(
     name='aws_lambda_tools',
-    version='1.0.3',
+    version='1.0.4',
     author='StoryStream',
     author_email='hello@storystream.it',
     description='A set of basic utilities for development with AWS lambda',
