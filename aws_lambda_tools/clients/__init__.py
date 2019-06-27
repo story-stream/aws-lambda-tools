@@ -6,6 +6,16 @@ except KeyError:
     is_dev = False
 
 if is_dev:
-    from dev_client import Client
+    try:
+        # Python 2
+        from dev_client import Client
+    except ImportError:
+        # Python 3
+        from clients.dev_client import Client
 else:
-    from live_client import Client
+    try:
+        #  Python 2
+        from live_client import Client
+    except ImportError:
+        # Python 3
+        from clients.live_client import Client
