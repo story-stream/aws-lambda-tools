@@ -28,10 +28,9 @@ class Client(object):
         ).json()
     
     def _parse_function_name(self, FunctionName):
-        config_location = os.environ.get('APP_CONFIG')
-        if config_location:
-            config = locate(config_location)
-            if config and FunctionName.startswith(config.MODULE_NAME):
-                FunctionName = f'{MODULE_NAME}/FunctionName[len(FunctionName):]'
-
-        return FunctionName
+        try:
+            app = os.environ['STORYSTREAM_APP']
+            route = FunctionName[len(FunctionName):]
+            FunctionName = f'{app}/{route}'
+        except KeyError:
+            return FunctionName        
