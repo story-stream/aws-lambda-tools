@@ -32,10 +32,10 @@ class Client(object):
     def _parse_function_name(self, FunctionName):
         try:
             available_services = os.environ['STORYSTREAM_SERVICES']
-            for service in available_services:
+            for service in available_services.split(','):
                 if FunctionName.startswith(service):
                     route = FunctionName[len(service) + 1:]
-                    
+
                     return f'{service}/{route}'
 
         except KeyError:
