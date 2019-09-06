@@ -13,8 +13,6 @@ class Client(object):
     def invoke(self, FunctionName, Payload, InvocationType='RequestResponse'):
         FunctionName = self._parse_function_name(FunctionName)
 
-        print(FunctionName)
-
         return requests.post(
             u'http://{}'.format(FunctionName),
             json=Payload
