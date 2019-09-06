@@ -32,7 +32,9 @@ class Client(object):
     def _parse_function_name(self, FunctionName):
         try:
             app = os.environ['STORYSTREAM_APP']
-            route = FunctionName[len(app) + 1:]
-            return f'{app}/{route}'
+            if FunctionName.startswith(app):
+                route = FunctionName[len(app) + 1:]
+                return f'{app}/{route}'
         except KeyError:
-            return FunctionName        
+            pass
+        return FunctionName        
