@@ -13,6 +13,8 @@ class Client(object):
     def invoke(self, FunctionName, Payload, InvocationType='RequestResponse'):
         FunctionName = self._parse_function_name(FunctionName)
 
+        print(FunctionName)
+
         return requests.post(
             u'http://{}'.format(FunctionName),
             json=Payload
@@ -30,7 +32,7 @@ class Client(object):
     def _parse_function_name(self, FunctionName):
         try:
             app = os.environ['STORYSTREAM_APP']
-            route = FunctionName[len(FunctionName):]
-            FunctionName = f'{app}/{route}'
+            route = FunctionName[len(app) + 1:]
+            return f'{app}/{route}'
         except KeyError:
             return FunctionName        
