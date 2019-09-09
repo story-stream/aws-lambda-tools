@@ -39,5 +39,5 @@ class Client(object):
         return result
 
     def _get_payload(self, body):
-        for chunk in iter(lambda: body.read(1024), b''):
+        for chunk in iter(lambda: body.read(1024).decode('utf-8'), b''):
             yield chunk
