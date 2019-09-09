@@ -20,8 +20,6 @@ class Client(object):
 
         if InvocationType == 'Event':
             return
-        
-        print(response)
 
         return json.loads(''.join(self._get_payload(response['Payload'])))
 
