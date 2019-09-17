@@ -1,8 +1,6 @@
 import os
 import requests
 
-from aws_lambda_tools.core import utils
-
 
 class Client(object):
 
@@ -27,6 +25,8 @@ class Client(object):
         return response.json()
 
     def start_execution(self, stateMachineArn, name, input, **kwargs):
+        from aws_lambda_tools.core import utils
+        
         state_machine_name = utils.get_state_machine_name(stateMachineArn)
 
         ServicePath = self._parse_function_name(state_machine_name)
