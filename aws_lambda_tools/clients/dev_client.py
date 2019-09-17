@@ -1,7 +1,7 @@
 import os
 import requests
 
-from aws_lambda_tools import utils
+from aws_lambda_tools.core import utils
 
 
 class Client(object):
