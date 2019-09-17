@@ -2,7 +2,7 @@ from collections import namedtuple
 from functools import wraps
 
 
-from aws_lambda_tools.core.logging import logger
+from aws_lambda_tools.core import logger
 from aws_lambda_tools.core.utils import execute, execute_next, log_result, merge
 
 

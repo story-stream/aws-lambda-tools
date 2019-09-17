@@ -9,7 +9,7 @@ from functools import wraps
 
 
 from aws_lambda_tools.clients import Client
-from aws_lambda_tools.core.logging import logger
+from aws_lambda_tools.core import logger
 
 
 lambda_client = Client(
