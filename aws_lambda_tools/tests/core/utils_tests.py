@@ -6,7 +6,10 @@ from mock import patch
 class UtilsTestCase(unittest.TestCase):
     def setUp(self):
         os_patcher = patch('aws_lambda_tools.core.utils.os')
-        os_patcher.start()
+        os = os_patcher.start()
+        os.environ = {
+            'AWS_REGION': 'test'
+        }
         self.addCleanup(os_patcher.stop)
 
         from aws_lambda_tools.core import utils
