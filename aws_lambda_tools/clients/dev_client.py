@@ -55,4 +55,6 @@ class Client(object):
             if FunctionName.startswith(service):
                 route = FunctionName[len(service) + 1:]
 
-                return f'{service}/{route}'       
+                return f'{service}/{route}'
+                
+        return FunctionName
