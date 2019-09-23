@@ -32,7 +32,7 @@ class Pipeline(object):
 
                     self._log_result(event, result)
 
-                    continue
+                    break
 
                 try:
                     result = self._request(task, event)
