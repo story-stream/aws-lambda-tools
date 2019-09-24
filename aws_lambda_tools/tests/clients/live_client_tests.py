@@ -22,7 +22,7 @@ class LiveClientInvokeTestCase(unittest.TestCase):
         client_patch.start()
         self.addCleanup(client_patch.stop)
 
-        self.target = Client()
+        self.target = Client('lambda')
         self.target._client = self.client
         self.target._get_payload = MagicMock()
         self.target._get_payload.side_effect = lambda x: x
