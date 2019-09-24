@@ -11,7 +11,14 @@ class LiveClientBaseTestCase(unittest.TestCase):
         target = Client('clive', dave=True)
         client = target._client
 
-        mock_client.assert_called_once_with('clive', dave=True)
+        mock_client.assert_called_once_with('clive', 'test', dave=True)
+    
+    @patch('aws_lambda_tools.clients.live_client.boto3.client', spec=True)
+    def test_creates_boto_client_instance_with_provided_params(self, mock_client):
+        target = Client('clive', region='region', dave=True)
+        client = target._client
+
+        mock_client.assert_called_once_with('clive', 'region', dave=True)
 
 
 class LiveClientInvokeTestCase(unittest.TestCase):
