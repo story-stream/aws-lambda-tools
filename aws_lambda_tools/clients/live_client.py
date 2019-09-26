@@ -1,11 +1,23 @@
 import boto3
+import botocore.config
 import json
+import os
 
 
 class Client(object):
 
-    def __init__(self, *args, **kwargs):
-        self._client = boto3.client(*args, **kwargs)
+    def __init__(self, client_type, region=None, *args, **kwargs):
+        if client_type == 'lambda' and 'config' not in kwargs:
+            kwargs['config'] = botocore.config.Config(
+                connect_timeout=300, 
+                read_timeout=300, 
+                retries={'max_attempts': 0}
+            )
+
+        if region is None:
+            region = os.environ['AWS_REGION']
+
+        self._client = boto3.client(client_type, region, *args, **kwargs)
 
     def invoke(self, FunctionName, Payload, InvocationType='RequestResponse', **kwargs):
         if hasattr(Payload, 'items') or hasattr(input, 'iteritems'):
