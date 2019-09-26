@@ -11,11 +11,11 @@ if is_dev:
         from dev_client import Client
     except ImportError:
         # Python 3
-        from clients.dev_client import Client
+        from aws_lambda_tools.clients.dev_client import Client
 else:
     try:
         #  Python 2
         from live_client import Client
     except ImportError:
         # Python 3
-        from clients.live_client import Client
+        from aws_lambda_tools.clients.live_client import Client

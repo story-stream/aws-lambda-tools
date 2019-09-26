@@ -1,5 +1,5 @@
 import unittest
-from aws_lambda_tools import utils
+from aws_lambda_tools.core import utils
 
 
 class UtilsTestCase(unittest.TestCase):
