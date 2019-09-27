@@ -33,7 +33,7 @@ class Client(object):
         if InvocationType == 'Event':
             return
 
-        return json.loads(''.join(self._get_payload(response['Payload'])))
+        return json.loads(response['Payload'].read().decode('utf-8'))
 
     def start_execution(self, stateMachineArn, name, input, **kwargs):
         if hasattr(input, 'items') or hasattr(input, 'iteritems'):
@@ -47,7 +47,3 @@ class Client(object):
         )
 
         return result
-
-    def _get_payload(self, body):
-        for chunk in iter(lambda: body.read(1024).decode('utf-8'), b''):
-            yield chunk
