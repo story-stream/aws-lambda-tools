@@ -33,7 +33,11 @@ class LiveClientInvokeTestCase(unittest.TestCase):
         self.target._client = self.client
 
         self.client.invoke.return_value = {
-            'Payload': '{"result": "ok"}'.encode('utf-8'),
+            'Payload': MagicMock(
+                read=MagicMock(
+                    return_value='{"result": "ok"}'.encode('utf-8'),
+                )
+            ),
         }
 
     def test_calls_client_invoke_with_provided_parameters(self):
@@ -64,9 +68,13 @@ class LiveClientInvokeTestCase(unittest.TestCase):
 
     def test_returns_result_as_a_dictionary(self):
         self.client.invoke.return_value = {
-            'Payload': '{"result": "ok"}'.encode('utf-8'),
+            'Payload': MagicMock(
+                read=MagicMock(
+                    return_value='{"result": "ok"}'.encode('utf-8'),
+                )
+            ),
         }
-        
+
         expected = {'result': 'ok'}
 
         actual = self.target.invoke(
