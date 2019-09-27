@@ -31,11 +31,9 @@ class LiveClientInvokeTestCase(unittest.TestCase):
 
         self.target = Client('lambda')
         self.target._client = self.client
-        self.target._get_payload = MagicMock()
-        self.target._get_payload.side_effect = lambda x: x
 
         self.client.invoke.return_value = {
-            'Payload': '{"result": "ok"}',
+            'Payload': '{"result": "ok"}'.encode('utf-8'),
         }
 
     def test_calls_client_invoke_with_provided_parameters(self):
@@ -65,8 +63,10 @@ class LiveClientInvokeTestCase(unittest.TestCase):
         )
 
     def test_returns_result_as_a_dictionary(self):
-        self.target._get_payload.return_value = '{"result": "ok"}'
-
+        self.client.invoke.return_value = {
+            'Payload': '{"result": "ok"}'.encode('utf-8'),
+        }
+        
         expected = {'result': 'ok'}
 
         actual = self.target.invoke(
