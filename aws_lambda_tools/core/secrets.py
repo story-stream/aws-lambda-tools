@@ -4,6 +4,8 @@ import json
 import os
 from botocore.exceptions import ClientError
 
+from .logger import logger
+
 
 def secret(name):
     if not name.startswith('secret:'):
@@ -29,6 +31,8 @@ def secret(name):
             break
         except ClientError as e:
             pass
+    else:
+        logger.error(f'Unable to get secret. \n{response.content}')
 
     # Decrypts secret using the associated KMS CMK.
     # Depending on whether the secret is a string or binary, one of these fields will be populated.
