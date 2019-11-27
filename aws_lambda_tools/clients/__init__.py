@@ -1,13 +1,11 @@
 import os
 
-from pydoc import locate
-
 
 environment = os.environ.get('STYSTM_ENVIRON', 'dev')
 
-client_string = 'aws_lambda_tools.clients.{}.Client'.format(environment)
+is_live = environment == 'live'
 
-Client = locate(client_string)
-
-if not Client:
-    raise ImportError('Environment {} is not valid. {}'.format(environment, client_string))
+if is_live:
+    from aws_lambda_tools.clients.live import Client
+else:
+    from aws_lambda_tools.clients.dev import Client
