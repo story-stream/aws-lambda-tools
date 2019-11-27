@@ -1,19 +1,19 @@
 import boto3
 import unittest
-from aws_lambda_tools.clients.live_client import Client
+from aws_lambda_tools.clients.live.client import Client
 from mock import patch, MagicMock
 
 
 class LiveClientBaseTestCase(unittest.TestCase):
 
-    @patch('aws_lambda_tools.clients.live_client.boto3.client', spec=True)
+    @patch('aws_lambda_tools.clients.live.client.boto3.client', spec=True)
     def test_creates_boto_client_instance_with_provided_params(self, mock_client):
         target = Client('clive', dave=True)
         client = target._client
 
         mock_client.assert_called_once_with('clive', 'test', dave=True)
-    
-    @patch('aws_lambda_tools.clients.live_client.boto3.client', spec=True)
+
+    @patch('aws_lambda_tools.clients.live.client.boto3.client', spec=True)
     def test_creates_boto_client_instance_with_provided_params(self, mock_client):
         target = Client('clive', region='region', dave=True)
         client = target._client
@@ -25,7 +25,7 @@ class LiveClientInvokeTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = MagicMock()
-        client_patch = patch('aws_lambda_tools.clients.live_client.boto3.client', return_value=self.client)
+        client_patch = patch('aws_lambda_tools.clients.live.client.boto3.client', return_value=self.client)
         client_patch.start()
         self.addCleanup(client_patch.stop)
 
