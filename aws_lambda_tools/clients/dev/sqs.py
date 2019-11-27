@@ -11,14 +11,14 @@ class SQS(Base):
         MessageAttributes = MessageAttributes or {}
         data = {
             'Records': [{
-                'MessageAttributes': {
+                'messageAttributes': {
                     key: {
                         'stringValue': value['StringValue'],
                         'dataType': value['DataType'],
                     }
                     for key, value in MessageAttributes.items()
                 },
-                'MessageBody': MessageBody,
+                'body': MessageBody,
             }]
         }
 
