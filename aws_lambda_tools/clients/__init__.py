@@ -6,7 +6,7 @@ from pydoc import locate
 environment = os.environ.get('STYSTM_ENVIRON', 'dev')
 
 
-Client = locate(f'aws_lambda_tools.clients.{environment}.Client')
+Client = locate('aws_lambda_tools.clients.{}.Client'.format(environment))
 
 if not Client:
     raise ImportError
