@@ -23,14 +23,14 @@ class SQS(Base):
         }
 
         response = requests.post(
-            u'http://{}'.format(ServicePath),
+            'http://{}'.format(ServicePath),
             json=data
         )
 
         # If the service does not have the path provided, call the function itself
         if response.status_code == 404:
             response = requests.post(
-                u'http://{}'.format(QueueUrl),
+                'http://{}'.format(QueueUrl),
                 json=data
             )
 

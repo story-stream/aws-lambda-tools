@@ -13,14 +13,14 @@ class StepFunctions(Base):
         ServicePath = self._parse_function_name(state_machine_name)
 
         response = requests.post(
-            u'http://{}'.format(ServicePath),
+            'http://{}'.format(ServicePath),
             json=input
         )
 
         # If the service does not have the path provided, call the function itself
         if response.status_code == 404:
             response = requests.post(
-                u'http://{}'.format(state_machine_name),
+                'http://{}'.format(state_machine_name),
                 json=input
             )
 

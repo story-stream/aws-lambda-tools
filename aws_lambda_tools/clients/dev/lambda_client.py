@@ -9,14 +9,14 @@ class Lambda(Base):
         ServicePath = self._parse_function_name(FunctionName)
 
         response = requests.post(
-            u'http://{}'.format(ServicePath),
+            'http://{}'.format(ServicePath),
             json=Payload
         )
 
         # If the service does not have the path provided, call the function itself
         if response.status_code == 404:
             response = requests.post(
-                u'http://{}'.format(FunctionName),
+                'http://{}'.format(FunctionName),
                 json=Payload
             )
 

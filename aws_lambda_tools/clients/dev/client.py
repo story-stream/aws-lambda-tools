@@ -14,4 +14,4 @@ def Client(client_type, *args, **kwargs):
     try:
         return MAPPING[client_type](*args, **kwargs)
     except KeyError:
-        raise RuntimeError(f'Client {client_type} is not supported')
+        raise RuntimeError('Client {} is not supported'.format(client_type))

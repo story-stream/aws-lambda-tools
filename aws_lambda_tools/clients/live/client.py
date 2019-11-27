@@ -9,8 +9,8 @@ class Client(object):
     def __init__(self, client_type, region=None, *args, **kwargs):
         if client_type == 'lambda' and 'config' not in kwargs:
             kwargs['config'] = botocore.config.Config(
-                connect_timeout=300, 
-                read_timeout=300, 
+                connect_timeout=300,
+                read_timeout=300,
                 retries={'max_attempts': 0}
             )
 

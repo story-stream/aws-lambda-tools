@@ -16,6 +16,6 @@ class Base(object):
             if function_name.startswith(service):
                 route = function_name[len(service) + 1:]
 
-                return f'{service}/{route}'
+                return '{}/{}'.format(service, route)
 
         return function_name
