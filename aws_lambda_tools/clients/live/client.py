@@ -39,11 +39,17 @@ class Client(object):
         if hasattr(input, 'items') or hasattr(input, 'iteritems'):
             input = json.dumps(input, default=lambda x: x.isoformat() if hasattr(x, 'isoformat') else x)
 
-        result = self._client.start_execution(
+        return self._client.start_execution(
             stateMachineArn=stateMachineArn,
             name=name,
             input=input,
             **kwargs
         )
 
-        return result
+    def send_message(self, QueueUrl, MessageBody, *args, **kwargs):
+        return self._client.send_message(
+            QueueUrl,
+            MessageBody,
+            *args,
+            **kwargs
+        )

@@ -1,21 +1,12 @@
 import os
 
-try:
-    is_dev = os.environ['STYSTM_ENVIRON'] == 'dev'
-except KeyError:
-    is_dev = False
+from pydoc import locate
 
-if is_dev:
-    try:
-        # Python 2
-        from dev_client import Client
-    except ImportError:
-        # Python 3
-        from aws_lambda_tools.clients.dev_client import Client
-else:
-    try:
-        #  Python 2
-        from live_client import Client
-    except ImportError:
-        # Python 3
-        from aws_lambda_tools.clients.live_client import Client
+
+environment = os.environ.get('STYSTM_ENVIRON', 'dev')
+
+
+Client = locate(f'aws_lambda_tools.clients.{environment}.Client')
+
+if not Client:
+    raise ImportError
