@@ -46,10 +46,9 @@ class Client(object):
             **kwargs
         )
 
-    def send_message(self, QueueUrl, MessageBody, *args, **kwargs):
+    def send_message(self, QueueUrl, MessageBody, **kwargs):
         return self._client.send_message(
-            QueueUrl,
-            MessageBody,
-            *args,
+            QueueUrl=QueueUrl,
+            MessageBody=MessageBody,
             **kwargs
         )
