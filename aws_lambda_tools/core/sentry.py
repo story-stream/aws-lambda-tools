@@ -1,3 +1,9 @@
+def aws_lambda():
+    from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
+
+    return AwsLambdaIntegration()
+
+
 INTEGRATION_MAPPING = {
     'lambda': aws_lambda
 }
@@ -25,11 +31,6 @@ def configure(integration='lambda'):
         dsn=SENTRY_DSN,
         integrations=[integration],
     )
-
-def aws_lambda():
-    from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
-
-    return AwsLambdaIntegration()
 
 
 __all__ = [
