@@ -31,8 +31,3 @@ def configure(integration='lambda'):
         dsn=SENTRY_DSN,
         integrations=[integration],
     )
-
-
-__all__ = [
-    'configure',
-]
