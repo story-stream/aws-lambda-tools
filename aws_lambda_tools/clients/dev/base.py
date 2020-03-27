@@ -1,21 +1,29 @@
 import os
+import requests
+
+
+def request(self, **data):
+    response = requests.post(
+        'http://local-aws/{}/'.format(self.endpoint),
+        json=data,
+    )
+
+    return response.json()
 
 
 class Base(object):
+    endpoint = ''
+    functions = ()
 
     def __init__(self, *args, **kwargs):
-        pass
+        if not self.endpoint:
+            raise RuntimeError('Must specify endpoint for client {}'.format(self.__class__))
 
-    def _parse_function_name(self, function_name):
-        try:
-            available_services = os.environ['STORYSTREAM_SERVICES']
-        except KeyError:
-            return function_name
+        if not self.functions:
+            raise RuntimeError('Must specify functions for client {}'.format(self.__class__))
 
-        for service in available_services.split(','):
-            if function_name.startswith(service):
-                route = function_name[len(service) + 1:]
+    def __getattr__(self, name):
+        if name not in self.functions:
+            raise AttributeError('{} has no attribute {}'.format(self.__class__, name))
 
-                return '{}/{}'.format(service, route)
-
-        return function_name
+        return lambda x: request(**x)

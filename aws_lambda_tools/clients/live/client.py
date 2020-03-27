@@ -11,7 +11,7 @@ class Client(object):
             kwargs['config'] = botocore.config.Config(
                 connect_timeout=300,
                 read_timeout=300,
-                retries={'max_attempts': 0}
+                retries={'max_attempts': 2}
             )
 
         if region is None:
