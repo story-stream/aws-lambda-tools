@@ -4,7 +4,7 @@ import requests
 
 def request(endpoint, **data):
     response = requests.post(
-        'http://local-aws/{}/'.format(endpoint),
+        'http://local-aws/{}'.format(endpoint),
         json=data,
     )
 
