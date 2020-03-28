@@ -2,5 +2,5 @@ from .base import Base
 
 
 class SQS(Base):
-    endpoint = 'aws-sqs'
+    endpoint = 'sqs'
     functions = ('send_message',)
