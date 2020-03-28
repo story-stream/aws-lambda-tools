@@ -26,4 +26,4 @@ class Base(object):
         if name not in self.functions:
             raise AttributeError('{} has no attribute {}'.format(self.__class__, name))
 
-        return lambda x: request(**x)
+        return lambda **x: request(**x)
