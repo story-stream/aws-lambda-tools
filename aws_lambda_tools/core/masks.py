@@ -19,8 +19,6 @@ def _apply(entry, masked_fields=None):
                     # final key-pair pair found
                     entry[key] = '*' * 16
 
-                return entry
-
     return entry
 
 
