@@ -9,9 +9,9 @@ class Client(object):
     def __init__(self, client_type, region=None, *args, **kwargs):
         if client_type == 'lambda' and 'config' not in kwargs:
             kwargs['config'] = botocore.config.Config(
-                connect_timeout=300, 
-                read_timeout=300, 
-                retries={'max_attempts': 0}
+                connect_timeout=300,
+                read_timeout=300,
+                retries={'max_attempts': 2}
             )
 
         if region is None:
@@ -33,21 +33,22 @@ class Client(object):
         if InvocationType == 'Event':
             return
 
-        return json.loads(''.join(self._get_payload(response['Payload'])))
+        return json.loads(response['Payload'].read().decode('utf-8'))
 
     def start_execution(self, stateMachineArn, name, input, **kwargs):
         if hasattr(input, 'items') or hasattr(input, 'iteritems'):
             input = json.dumps(input, default=lambda x: x.isoformat() if hasattr(x, 'isoformat') else x)
 
-        result = self._client.start_execution(
+        return self._client.start_execution(
             stateMachineArn=stateMachineArn,
             name=name,
             input=input,
             **kwargs
         )
 
-        return result
-
-    def _get_payload(self, body):
-        for chunk in iter(lambda: body.read(1024).decode('utf-8'), b''):
-            yield chunk
+    def send_message(self, QueueUrl, MessageBody, **kwargs):
+        return self._client.send_message(
+            QueueUrl=QueueUrl,
+            MessageBody=MessageBody,
+            **kwargs
+        )

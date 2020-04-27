@@ -1,19 +1,19 @@
 import boto3
 import unittest
-from aws_lambda_tools.clients.live_client import Client
+from aws_lambda_tools.clients.live.client import Client
 from mock import patch, MagicMock
 
 
 class LiveClientBaseTestCase(unittest.TestCase):
 
-    @patch('aws_lambda_tools.clients.live_client.boto3.client', spec=True)
+    @patch('aws_lambda_tools.clients.live.client.boto3.client', spec=True)
     def test_creates_boto_client_instance_with_provided_params(self, mock_client):
         target = Client('clive', dave=True)
         client = target._client
 
         mock_client.assert_called_once_with('clive', 'test', dave=True)
-    
-    @patch('aws_lambda_tools.clients.live_client.boto3.client', spec=True)
+
+    @patch('aws_lambda_tools.clients.live.client.boto3.client', spec=True)
     def test_creates_boto_client_instance_with_provided_params(self, mock_client):
         target = Client('clive', region='region', dave=True)
         client = target._client
@@ -25,17 +25,19 @@ class LiveClientInvokeTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = MagicMock()
-        client_patch = patch('aws_lambda_tools.clients.live_client.boto3.client', return_value=self.client)
+        client_patch = patch('aws_lambda_tools.clients.live.client.boto3.client', return_value=self.client)
         client_patch.start()
         self.addCleanup(client_patch.stop)
 
         self.target = Client('lambda')
         self.target._client = self.client
-        self.target._get_payload = MagicMock()
-        self.target._get_payload.side_effect = lambda x: x
 
         self.client.invoke.return_value = {
-            'Payload': '{"result": "ok"}',
+            'Payload': MagicMock(
+                read=MagicMock(
+                    return_value='{"result": "ok"}'.encode('utf-8'),
+                )
+            ),
         }
 
     def test_calls_client_invoke_with_provided_parameters(self):
@@ -65,7 +67,13 @@ class LiveClientInvokeTestCase(unittest.TestCase):
         )
 
     def test_returns_result_as_a_dictionary(self):
-        self.target._get_payload.return_value = '{"result": "ok"}'
+        self.client.invoke.return_value = {
+            'Payload': MagicMock(
+                read=MagicMock(
+                    return_value='{"result": "ok"}'.encode('utf-8'),
+                )
+            ),
+        }
 
         expected = {'result': 'ok'}
 

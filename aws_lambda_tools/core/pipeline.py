@@ -11,8 +11,8 @@ from .decorators import log
 
 
 class Pipeline(object):
-    lambda_client = Client('lambda', os.environ['AWS_REGION'])
-    step_client = Client('stepfunctions', os.environ['AWS_REGION'])
+    lambda_client = Client('lambda')
+    step_client = Client('stepfunctions')
 
     def __init__(self, tasks, success=None, error=None, key=None):
         self.tasks = deepcopy(tasks)
