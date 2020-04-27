@@ -78,7 +78,12 @@ def api(func):
 
     @wraps(func)
     def wrapped_function(event, context):
-        event['body'] = json.loads(event['body'])
+        try:
+            event['body'] = json.loads(event.get('body', {}))
+        except (ValueError, TypeError):
+            # GETs do not have a body
+            pass
+
         try:
             result = func(event, context)
         except (ValueError, TypeError):
@@ -92,7 +97,7 @@ def api(func):
 
         status_code = 200
         is_encoded = False
-        headers = {'Content-Type": "application/json'}
+        headers = {'Content-Type': 'application/json'}
         body = ''
 
         if isinstance(result, dict):
