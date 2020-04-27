@@ -2,6 +2,7 @@ import json
 from functools import wraps
 from http.client import responses
 
+from aws_lambda_tools.core import masks
 from aws_lambda_tools.core.logger import logger
 
 
@@ -44,7 +45,12 @@ def api(func):
 
     @wraps(func)
     def wrapped_function(event, context):
-        event['body'] = json.loads(event['body'])
+        try:
+            event['body'] = json.loads(event.get('body', {}))
+        except (ValueError, TypeError):
+            # GETs do not have a body
+            pass
+
         try:
             result = func(event, context)
         except (ValueError, TypeError):
@@ -58,7 +64,7 @@ def api(func):
 
         status_code = 200
         is_encoded = False
-        headers = {'Content-Type": "application/json'}
+        headers = {'Content-Type': 'application/json'}
         body = ''
 
         if isinstance(result, dict):
@@ -87,6 +93,61 @@ def api(func):
         }
 
     return wrapped_function
+
+
+def masked_log(masked_fields=None):
+
+    def actual_log(func):
+
+        @masked_log_after(masked_fields=masked_fields)
+        @masked_log_before(masked_fields=masked_fields)
+        @wraps(func)
+        def wrapped_function(*args, **kwargs):
+            return _execute(func, *args, **kwargs)
+
+        return wrapped_function
+
+    return actual_log
+
+
+def masked_log_before(masked_fields=None):
+
+    def actual_log_before(func):
+
+        @wraps(func)
+        def wrapped_function(*args, **kwargs):
+            logged_args, logged_kwargs = masks._input(masked_fields=masked_fields, *args, **kwargs)
+
+            logger.info('Recieved: args={} kwargs={}'.format(
+                    json.dumps(logged_args),
+                    json.dumps(logged_kwargs)
+                )
+            )
+
+            return _execute(func, *args, **kwargs)
+
+        return wrapped_function
+
+    return actual_log_before
+
+
+def masked_log_after(masked_fields=None):
+
+    def actual_log_after(func):
+
+        @wraps(func)
+        def wrapped_function(*args, **kwargs):
+            result = _execute(func, *args, **kwargs)
+
+            logged_result = masks._output(result, masked_fields=masked_fields)
+
+            logger.info('Returning: {}'.format(json.dumps(logged_result)))
+
+            return result
+
+        return wrapped_function
+
+    return actual_log_after
 
 
 def _execute(func, *args, **kwargs):
