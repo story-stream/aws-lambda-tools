@@ -1,5 +1,6 @@
 import json
 from copy import deepcopy
+from collections.abc import Iterable
 
 from werkzeug.datastructures import ImmutableMultiDict
 
@@ -59,6 +60,7 @@ def _input(*args, **kwargs):
             deepcopy(entry), masked_fields=masked_fields
         )
         for entry in args
+        if isinstance(entry, Iterable)
     ]
 
     return logged_args, kwargs
@@ -81,4 +83,5 @@ def _output(result, masked_fields=None):
     return [
         _apply(entry, masked_fields=masked_fields)
         for entry in result
+        if isinstance(entry, Iterable)
     ]
