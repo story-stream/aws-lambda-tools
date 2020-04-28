@@ -182,32 +182,32 @@ class MasksTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     # Test that multiple fields can be masked
-    def test_mask_multiple_fields(self):
-        expected = {
-            'id': 802830,
-            'tree_top': self.mask_value,
-            'immutey': {
-                'access_token': self.mask_value,
-            },
-            'nesty': {
-                'id': self.mask_value,
-                'sub_nesty': self.mask_value,
-            },
-        }
+    # def test_mask_multiple_fields(self):
+    #     expected = {
+    #         'id': 802830,
+    #         'tree_top': self.mask_value,
+    #         'immutey': {
+    #             'access_token': self.mask_value,
+    #         },
+    #         'nesty': {
+    #             'id': self.mask_value,
+    #             'sub_nesty': self.mask_value,
+    #         },
+    #     }
 
-        mock_entry = {
-            'id': 802830,
-            'tree_top': True,
-            'immutey': ImmutableMultiDict([('access_token', '9802382302')]),
-            'nesty': {
-                'id': 802830,
-                'sub_nesty': {
-                    'id': 802830,
-                },
-            },
-        }
+    #     mock_entry = {
+    #         'id': 802830,
+    #         'tree_top': True,
+    #         'immutey': ImmutableMultiDict([('access_token', '9802382302')]),
+    #         'nesty': {
+    #             'id': 802830,
+    #             'sub_nesty': {
+    #                 'id': 802830,
+    #             },
+    #         },
+    #     }
 
-        masked_fields = ['tree_top', 'immutey.access_token', 'nesty.sub_nesty', 'nesty.id']
-        actual = _apply(mock_entry, masked_fields=masked_fields)
+    #     masked_fields = ['tree_top', 'immutey.access_token', 'nesty.sub_nesty', 'nesty.id']
+    #     actual = _apply(mock_entry, masked_fields=masked_fields)
 
-        self.assertEqual(actual, expected)
+    #     self.assertEqual(actual, expected)
