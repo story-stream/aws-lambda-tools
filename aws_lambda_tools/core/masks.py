@@ -18,6 +18,8 @@ def _apply(entry, masked_fields=None, key_chain=None):
     :params key_chain: <string> string to track the chain of parent keys, to make sure we
         mask exactly the specified key chain.
     """
+    init_key_chain = key_chain
+
     for key, value in entry.items():
         for masked_field in masked_fields:
             # e.g. 'body.access_token'
@@ -36,6 +38,8 @@ def _apply(entry, masked_fields=None, key_chain=None):
 
                     # recurse through sub-dict till we hit the final key-value pair
                     entry[key] = _apply(value, masked_fields=masked_fields, key_chain=key_chain)
+        
+        key_chain = init_key_chain
 
     return entry
 
