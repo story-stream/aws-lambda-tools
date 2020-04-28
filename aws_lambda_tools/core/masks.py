@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from werkzeug.datastructures import ImmutableMultiDict
 
-def _build_key_chain(key_chain, key=None)
+def _build_key_chain(key_chain, key=None):
     if key_chain is None:
         return key
     
