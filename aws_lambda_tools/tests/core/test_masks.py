@@ -39,7 +39,7 @@ class MasksTestCase(unittest.TestCase):
         expected['id'] = self.mask_value
         self.assertEqual(actual, expected)
 
-     def test_mask_nested_id_only(self):
+    def test_mask_nested_id_only(self):
         masked_fields = ['nesty.id']
         actual = _apply(self.complex_entry, masked_fields=masked_fields)
 
@@ -55,7 +55,7 @@ class MasksTestCase(unittest.TestCase):
         expected['nesty']['sub_nesty']['id'] = self.mask_value
         self.assertEqual(actual, expected)
     
-    # Test that non-string valued fields are masked
+    # Test that entire blocks can be masked, including nested dicts
     def test_mask_list_fields(self):
         masked_fields = ['listy']
         actual = _apply(self.complex_entry, masked_fields=masked_fields)
@@ -80,6 +80,14 @@ class MasksTestCase(unittest.TestCase):
         expected['immutey'] = self.mask_value
         self.assertEqual(actual, expected)
     
+    def test_mask_list_fields(self):
+        masked_fields = ['nesty.subnesty']
+        actual = _apply(self.complex_entry, masked_fields=masked_fields)
+
+        expected = deepcopy(self.complex_entry)
+        expected['nesty']['subnesty'] = self.mask_value
+        self.assertEqual(actual, expected)
+    
     # Test that immutable dictionary contents can also be masked
     def test_mask_list_fields(self):
         masked_fields = ['immutey.access_token']
@@ -87,4 +95,24 @@ class MasksTestCase(unittest.TestCase):
 
         expected = deepcopy(self.complex_entry)
         expected['immutey'] = {'access_token': self.mask_value}
+        self.assertEqual(actual, expected)
+    
+    def test_mask_list_fields(self):
+        masked_fields = ['nesty.immutey.access_token']
+        actual = _apply(self.complex_entry, masked_fields=masked_fields)
+
+        expected = deepcopy(self.complex_entry)
+        expected['nesty']['immutey'] = {'access_token': self.mask_value}
+        self.assertEqual(actual, expected)
+
+    # Test that multiple fields can be masked
+    def test_mask_list_fields(self):
+        masked_fields = ['tree_top', 'immutey.access_token', 'nesty.subnesty', 'nesty.id']
+        actual = _apply(self.complex_entry, masked_fields=masked_fields)
+
+        expected = deepcopy(self.complex_entry)
+        expected['tree_top'] = self.mask_value
+        expected['immutey'] = {'access_token': self.mask_value}
+        expected['nesty']['sub_nesty'] = self.mask_value
+        expected['nesty']['id'] = self.mask_value
         self.assertEqual(actual, expected)
