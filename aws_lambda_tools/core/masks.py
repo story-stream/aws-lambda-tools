@@ -3,21 +3,39 @@ from copy import deepcopy
 
 from werkzeug.datastructures import ImmutableMultiDict
 
+def _build_key_chain(key_chain, key=None)
+    if key_chain is None:
+        return key
+    
+    return '.'.join(key_chain, key)
 
-def _apply(entry, masked_fields=None):
+def _apply(entry, masked_fields=None, key_chain=None):
+    """
+    Recursively run through the event (dict) until all desired fields are masked
+    :params entry: <dict> of some form. Can be heavily nested
+    :params masked_fields: <list> of fields to mask (dotted notation for nested fields)
+    :params key_chain: <string> string to track the chain of parent keys, to make sure we
+        mask exactly the specified key chain.
+    """
     for key, value in entry.items():
         for masked_field in masked_fields:
             # e.g. 'body.access_token'
+
+            if key_chain is masked_field:
+                # Exact field found
+                entry[key] = '*' * 16
+                continue
+
             if key in masked_field:
+                # Must dig deeper into the nest
+                key_chain = _build_key_chain(key_chain, key=key)
+
                 if isinstance(value, ImmutableMultiDict):
                     value = value.to_dict(flat=False)
 
                 if isinstance(value, dict):
                     # recurse through sub-dict till we hit the final key-value pair
-                    entry[key] = _apply(value, masked_fields=masked_fields)
-                else:
-                    # final key-pair pair found
-                    entry[key] = '*' * 16
+                    entry[key] = _apply(value, masked_fields=masked_fields, key_chain=key_chain)
 
     return entry
 
