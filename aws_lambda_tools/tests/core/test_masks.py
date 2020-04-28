@@ -82,11 +82,11 @@ class MasksTestCase(unittest.TestCase):
     # Test that entire blocks can be masked, including nested dicts
     def test_mask_list_valued_field(self):
         expected = {
-            'listy': [1, 2, 3, ]
+            'listy': self.mask_value,
         }
 
         mock_entry = {
-            'listy': self.mask_value
+            'listy': [1, 2, 3, ]
         }
 
         masked_fields = ['listy']

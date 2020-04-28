@@ -21,18 +21,12 @@ def _apply(entry, masked_fields=None, key_chain=None):
     for key, value in entry.items():
         for masked_field in masked_fields:
             # e.g. 'body.access_token'
-
-            print('> masked_field: {}, key: {}'.format(masked_field, key))
             if masked_field in [key_chain, _build_key_chain(key_chain, key=key)]:
                 # Exact field found
                 entry[key] = '*' * 16
-
-                print('> ----- BINGO ------ key_chain: {}, key: {}'.format(key_chain, key))
-                breakpoint
+                break
 
             if key in masked_field:
-                print('> ----- NESTY WESTY TIME! ------')
-
                 # Must dig deeper into the nest
                 if isinstance(value, ImmutableMultiDict):
                     value = value.to_dict(flat=False)
