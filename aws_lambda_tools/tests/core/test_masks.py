@@ -1,5 +1,6 @@
 import unittest
 from copy import deepcopy
+from werkzeug.datastructures import ImmutableMultiDict
 
 from aws_lambda_tools.core.masks import _apply
 
@@ -25,7 +26,8 @@ class MasksTestCase(unittest.TestCase):
         self.mask_value = '*' * 16
 
     def test_no_masking(self):
-        actual = _apply(self.complex_entry)
+        masked_fields = []
+        actual = _apply(self.complex_entry, masked_fields=masked_fields)
 
         expected = deepcopy(self.complex_entry)
         self.assertEqual(actual, expected)
@@ -62,6 +64,11 @@ class MasksTestCase(unittest.TestCase):
 
         expected = deepcopy(self.complex_entry)
         expected['listy'] = self.mask_value
+
+        with open('test_results.txt', 'a+') as f:
+            f.writelines('\nactual={}\nexpected={}\n'.format(actual, expected))
+            f.close()
+        
         self.assertEqual(actual, expected)
     
     def test_mask_list_fields(self):

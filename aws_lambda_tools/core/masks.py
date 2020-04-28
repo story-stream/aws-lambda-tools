@@ -7,7 +7,7 @@ def _build_key_chain(key_chain, key=None):
     if key_chain is None:
         return key
     
-    return '.'.join(key_chain, key)
+    return '.'.join([key_chain, key])
 
 def _apply(entry, masked_fields=None, key_chain=None):
     """
