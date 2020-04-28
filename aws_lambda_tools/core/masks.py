@@ -18,18 +18,18 @@ def _apply(entry, masked_fields=None, key_chain=None):
         mask exactly the specified key chain.
     """
     for key, value in entry.items():
+        key_chain = _build_key_chain(key_chain, key=key)
+
         for masked_field in masked_fields:
             # e.g. 'body.access_token'
 
-            if key_chain is masked_field:
+            if masked_field is key_chain:
                 # Exact field found
                 entry[key] = '*' * 16
-                continue
+                break
 
             if key in masked_field:
                 # Must dig deeper into the nest
-                key_chain = _build_key_chain(key_chain, key=key)
-
                 if isinstance(value, ImmutableMultiDict):
                     value = value.to_dict(flat=False)
 
