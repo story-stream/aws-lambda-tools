@@ -1,6 +1,6 @@
 import json
 from copy import deepcopy
-from collections.abc import Iterable
+from collections import Iterable
 
 from werkzeug.datastructures import ImmutableMultiDict
 
