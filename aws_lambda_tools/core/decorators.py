@@ -84,7 +84,6 @@ def api(func):
 
         return {
             'statusCode': status_code,
-            'statusDescription': responses[status_code],
             'isBase64Encoded': is_encoded,
             'headers': headers,
             'body': json.dumps(body),
