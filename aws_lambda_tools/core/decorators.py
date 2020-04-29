@@ -1,6 +1,5 @@
 import json
 from functools import wraps
-from http.client import responses
 
 from aws_lambda_tools.core import masks
 from aws_lambda_tools.core.logger import logger
@@ -56,7 +55,6 @@ def api(func):
         except (ValueError, TypeError):
             return {
                 'statusCode': 400,
-                'statusDescription': responses[400],
                 'isBase64Encoded': False,
                 'headers': {},
                 'body': '',
