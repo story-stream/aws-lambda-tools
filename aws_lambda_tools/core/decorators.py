@@ -85,7 +85,7 @@ def api(func):
         return {
             'statusCode': status_code,
             'isBase64Encoded': is_encoded,
-            'headers': headers,
+            'headers': _lower_case_x_fields(headers),
             'body': json.dumps(body),
         }
 
@@ -153,3 +153,8 @@ def _execute(func, *args, **kwargs):
     except Exception:
         logger.exception('Error occurred')
         raise
+
+def _lower_case_x_fields(headers):
+    for field, value in headers.items():
+        if field.lower().startswith('x-'):
+            headers[field.lower()] = headers.pop(field)
