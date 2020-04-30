@@ -50,6 +50,8 @@ def api(func):
             # GETs do not have a body
             pass
 
+        event['headers'] = _lower_case_x_fields(event['headers'])
+
         try:
             result = func(event, context)
         except (ValueError, TypeError):
