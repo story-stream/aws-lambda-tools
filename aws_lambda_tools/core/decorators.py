@@ -161,4 +161,4 @@ def _lower_case_x_fields(headers):
         if field.lower().startswith('x-'):
             headers[field.lower()] = headers.pop(field)
 
-        return headers
+    return headers
