@@ -157,8 +157,8 @@ def _execute(func, *args, **kwargs):
         raise
 
 def _lower_case_x_fields(headers):
-    for field, value in headers.items():
+    for field, value in list(headers.items()):
         if field.lower().startswith('x-'):
             headers[field.lower()] = headers.pop(field)
-    
-    return headers
+
+        return headers
