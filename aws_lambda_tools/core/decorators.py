@@ -88,7 +88,7 @@ def api(func):
             'statusCode': status_code,
             'isBase64Encoded': is_encoded,
             'headers': _lower_case_x_fields(headers),
-            'body': json.dumps(body),
+            'body': body if type(body) is str else json.dumps(body),
         }
 
     return wrapped_function
