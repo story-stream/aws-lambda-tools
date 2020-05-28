@@ -20,7 +20,7 @@ def log_before(func):
 
     @wraps(func)
     def wrapped_function(*args, **kwargs):
-        logger.info('Recieved: args={} kwargs={}'.format(json.dumps(args), json.dumps(kwargs)))
+        logger.info('Recieved: args={} kwargs={}'.format(args, kwargs))
 
         return _execute(func, *args, **kwargs)
 
