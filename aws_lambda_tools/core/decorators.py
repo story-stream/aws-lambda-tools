@@ -20,7 +20,7 @@ def log_before(func):
 
     @wraps(func)
     def wrapped_function(*args, **kwargs):
-        logger.info('Recieved: args={} kwargs={}'.format(json.dumps(args), json.dumps(kwargs)))
+        logger.info('Recieved: args={} kwargs={}'.format(args, kwargs))
 
         return _execute(func, *args, **kwargs)
 
@@ -51,7 +51,7 @@ def masked_log(masked_fields=None):
             return _execute(func, *args, **kwargs)
 
         return wrapped_function
-    
+
     return actual_log
 
 
@@ -74,7 +74,7 @@ def masked_log_after(masked_fields=None):
     return actual_log_after
 
 
-def api(func):
+def alb(func):
 
     @wraps(func)
     def wrapped_function(event, context):
@@ -120,6 +120,58 @@ def api(func):
         return {
             'statusCode': status_code,
             'statusDescription': responses[status_code],
+            'isBase64Encoded': is_encoded,
+            'headers': headers,
+            'body': json.dumps(body),
+        }
+
+    return wrapped_function
+
+
+def api(func):
+
+    @wraps(func)
+    def wrapped_function(event, context):
+        try:
+            event['body'] = json.loads(event.get('body', {}))
+        except (ValueError, TypeError):
+            # GETs do not have a body
+            pass
+
+        try:
+            result = func(event, context)
+        except (ValueError, TypeError):
+            return {
+                'statusCode': 400,
+                'isBase64Encoded': False,
+                'headers': {},
+                'body': '',
+            }
+
+        status_code = 200
+        is_encoded = False
+        headers = {'Content-Type': 'application/json'}
+        body = ''
+
+        if isinstance(result, dict):
+            status_code = result.get('statusCode', status_code)
+            is_encoded = result.get('isBase64Encoded', is_encoded)
+            headers = result.get('headers', headers)
+            body = result.get('body', '')
+
+        else:
+            try:
+                body, status_code, headers = result
+            except ValueError:
+                headers = {}
+                try:
+                    body, status_code = result
+                except ValueError:
+                    status_code = 200
+                    body = result
+
+        return {
+            'statusCode': status_code,
             'isBase64Encoded': is_encoded,
             'headers': headers,
             'body': json.dumps(body),
