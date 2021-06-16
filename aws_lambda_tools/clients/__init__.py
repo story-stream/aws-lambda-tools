@@ -1,21 +1,10 @@
 import os
 
-try:
-    is_dev = os.environ['STYSTM_ENVIRON'] == 'dev'
-except KeyError:
-    is_dev = False
+environment = os.environ.get('STYSTM_ENVIRON', 'dev')
 
-if is_dev:
-    try:
-        # Python 2
-        from dev_client import Client
-    except ImportError:
-        # Python 3
-        from aws_lambda_tools.clients.dev_client import Client
+is_live = environment == 'live'
+
+if is_live:
+    from .live_client import Client
 else:
-    try:
-        #  Python 2
-        from live_client import Client
-    except ImportError:
-        # Python 3
-        from aws_lambda_tools.clients.live_client import Client
+    from .dev_client import Client
